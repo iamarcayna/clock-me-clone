@@ -3,32 +3,44 @@
     class="w-[220px] h-screen bg-gray-50 shadow-2xl px-3 pb-3 flex flex-col justify-between"
   >
     <div>
-      <RouterLink :to="{ name: 'home' }"
+      <RouterLink :to="{ name: 'reports' }"
         ><p
-          class="text-xl font-bold text-sky-600 text-center py-3 hover:bg-gray-100"
+          class="flex items-center justify-center gap-2 text-xl font-bold text-blue-600 text-center py-3 hover:bg-gray-100"
         >
-          clock<span class="font-light">me</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+          <span>clock<span class="font-light">me</span> </span>
         </p>
       </RouterLink>
       <hr />
-      <div class="flex flex-col py-2 text-gray-950/70 text-sm font-medium">
-        <button
-          @click="
-            activeId = item.id;
-            emits('sideBarItemClicked', item);
-          "
-          :class="{
-            'bg-sky-100 text-sky-600': activeId === item.id,
-          }"
+      <div class="flex flex-col py-2 mt-3 text-gray-950/70 text-sm font-medium">
+        <RouterLink
+          :to="{ name: item.link }"
+          :active-class="'bg-sky-600 text-gray-50'"
           v-for="item in sidebarItems"
           :key="item.id"
-          class="text-start px-5 py-2 hover:bg-sky-100 rounded-md flex justify-between items-center"
+          class="text-start px-5 py-1 rounded-md flex justify-between items-center"
+          :class="{ 'hover:bg-sky-100': route.name !== item.link }"
         >
           {{ item.name }}
-          <span class="text-blue-500 rounded-full p-1 font-bold text-sm">{{
-            item.notifCount
-          }}</span>
-        </button>
+          <span
+            :class="{ 'text-gray-50': route.name === item.link }"
+            class="text-blue-500 rounded-full p-1 font-bold text-sm"
+            >{{ item.notifCount }}</span
+          >
+        </RouterLink>
       </div>
     </div>
 
@@ -96,17 +108,14 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRoute } from "vue-router";
 
 const sidebarItems = ref([
-  { id: 1, name: "Reports", notifCount: 5 },
-  { id: 2, name: "Timelines", notifCount: 7 },
-  { id: 3, name: "Projects", notifCount: 2 },
-  { id: 4, name: "Members", notifCount: 50 },
+  { id: 1, name: "Reports", notifCount: 5, link: "reports" },
+  { id: 2, name: "Timelines", notifCount: 7, link: "timelines" },
+  { id: 3, name: "Projects", notifCount: 2, link: "projects" },
+  { id: 4, name: "Members", notifCount: 50, link: "members" },
 ]);
 
-const activeId = ref(1);
-
-const emits = defineEmits<{
-  sideBarItemClicked: [{ id: Number; name: String; notifCount: Number }]; // named tuple syntax
-}>();
+const route = useRoute();
 </script>

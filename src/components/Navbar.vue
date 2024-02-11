@@ -1,10 +1,12 @@
 <template>
   <nav
-    class="bg-gray-50 w-full py-3 shadow-md flex items-center justify-between px-5"
+    class="bg-gray-50 rounded-f w-full py-2 shadow-md flex items-center justify-between px-5"
   >
-    <div>{{ link.name }}</div>
+    <div class="text-lg text-blue-600 font-bold capitalize">
+      {{ route.name }}
+    </div>
     <div>
-      <button>
+      <button class="rounded-full bg-gray-200 p-1 text-blue-600">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -25,5 +27,7 @@
 </template>
 
 <script setup lang="ts">
-defineProps(["link"]);
+import { useRoute } from "vue-router";
+
+const route = useRoute();
 </script>
