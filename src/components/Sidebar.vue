@@ -1,40 +1,36 @@
 <template>
   <div
-    class="w-[220px] h-screen bg-gray-50 shadow-2xl px-3 pb-3 flex flex-col justify-between"
+    class="w-[280px] h-screen bg-white flex flex-col justify-between border-r"
   >
     <div>
-      <RouterLink :to="{ name: 'reports' }"
-        ><p
-          class="flex items-center justify-center gap-2 text-xl font-bold text-blue-600 text-center py-3 hover:bg-gray-100"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6"
+      <div class="p-[6px] h-[59px]">
+        <RouterLink :to="{ name: 'reports' }"
+          ><p
+            class="flex items-center justify-center gap-2 text-xl rounded-md font-bold text-gray-800 text-center h-full hover:bg-gray-100"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
-          </svg>
-          <span>clock<span class="font-light">me</span> </span>
-        </p>
-      </RouterLink>
+            <span>clock<span class="font-light">me</span></span>
+          </p>
+        </RouterLink>
+      </div>
       <hr />
-      <div class="flex flex-col py-2 mt-3 text-gray-950/70 text-sm font-medium">
+      <div class="flex flex-col py-2 mt-3 px-2 text-gray-700 text-sm">
         <RouterLink
           :to="{ name: item.link }"
-          :active-class="'bg-sky-600 text-gray-50'"
+          :active-class="'bg-blue-500 text-gray-50'"
           v-for="item in sidebarItems"
           :key="item.id"
           class="text-start px-5 py-1 rounded-md flex justify-between items-center"
-          :class="{ 'hover:bg-sky-100': route.name !== item.link }"
+          :class="{ 'hover:bg-gray-100': route.name !== item.link }"
         >
-          {{ item.name }}
+          <span class="flex gap-2 items-center justify-center">
+            <img
+              :src="'/src/assets/images/' + item.icon"
+              :alt="item.name"
+              class="h-4 w-4 opacity-60"
+              :class="{ invert: route.name === item.link }"
+            />
+            {{ item.name }}
+          </span>
           <span
             :class="{ 'text-gray-50': route.name === item.link }"
             class="text-blue-500 rounded-full p-1 font-bold text-sm"
@@ -42,80 +38,193 @@
           >
         </RouterLink>
       </div>
+      <ul
+        v-for="item in subMenuItems"
+        :key="item.id"
+        class="flex flex-col mt-2 px-2"
+      >
+        <button
+          @click="toggle(item.id)"
+          class="text-gray-400 font-semibold text-sm text-start px-5 py-1 rounded-md flex justify-between items-center"
+        >
+          <span class="inline-flex w-full gap-1 items-center justify-between">
+            {{ item.name }}
+            <span
+              class="text-blue-500 rounded-full p-1 font-bold text-sm mr-2"
+              >{{ item.children.length }}</span
+            >
+          </span>
+          <img
+            v-if="item.isOpen"
+            src="../assets/images/chevron-down.svg"
+            alt="more items"
+            class="h-4 w-4 opacity-60"
+          />
+          <img
+            v-else
+            src="../assets/images/chevron-right.svg"
+            alt="hide items"
+            class="h-4 w-4 opacity-60"
+          />
+        </button>
+        <div v-if="item.isOpen" class="overflow-y-auto h-[200px]">
+          <li
+            class="text-gray-700 text-sm text-start px-5 py-2 hover:bg-gray-100 cursor-pointer rounded-md gap-2 flex justify-start items-center"
+            v-for="subItem in item.children"
+          >
+            <div class="rounded-full bg-gray-100 p-1">
+              <img
+                src="../assets/images/profile.svg"
+                alt="profile"
+                class="h-4 w-4"
+              />
+            </div>
+            {{ subItem.name }}
+          </li>
+        </div>
+      </ul>
     </div>
 
-    <div class="justify-self-end">
+    <div>
       <hr />
-      <div class="pt-3 flex justify-between px-1 text-sm">
-        <button
-          class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 hover:text-green-700 text-gray-700"
+      <div class="py-3 flex justify-between px-3 text-sm">
+        <div
+          class="flex items-center justify-center font-semibold text-sm gap-2"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75"
-            />
-          </svg>
+          <span class="bg-green-500 px-2 rounded-full text-gray-50">In</span>
+          <span class="text-gray-600">07:57 AM</span>
+        </div>
+        <button
+          @click="toggleModalIn"
+          class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 hover:text-green-700 text-gray-500"
+        >
+          <img
+            src="../assets/images/clock-in.svg"
+            alt="clock in"
+            class="h-5 w-5 opacity-60"
+          />
         </button>
         <button
-          class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 hover:text-amber-600 text-gray-700"
+          @click="toggleModalBreak"
+          class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 hover:text-amber-600 text-gray-500"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M10.05 4.575a1.575 1.575 0 1 0-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 0 1 3.15 0v1.5m-3.15 0 .075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 0 1 3.15 0V15M6.9 7.575a1.575 1.575 0 1 0-3.15 0v8.175a6.75 6.75 0 0 0 6.75 6.75h2.018a5.25 5.25 0 0 0 3.712-1.538l1.732-1.732a5.25 5.25 0 0 0 1.538-3.712l.003-2.024a.668.668 0 0 1 .198-.471 1.575 1.575 0 1 0-2.228-2.228 3.818 3.818 0 0 0-1.12 2.687M6.9 7.575V12m6.27 4.318A4.49 4.49 0 0 1 16.35 15m.002 0h-.002"
-            />
-          </svg>
+          <img
+            src="../assets/images/break.svg"
+            alt="break"
+            class="h-5 w-5 opacity-60"
+          />
         </button>
         <button
-          class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 hover:text-red-500 text-gray-700"
+          @click="toggleModalOut"
+          class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 hover:text-red-500 text-gray-500"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
-            />
-          </svg>
+          <img
+            src="../assets/images/clock-out.svg"
+            alt="clock out"
+            class="h-5 w-5 opacity-60"
+          />
         </button>
       </div>
     </div>
+    <BaseModal
+      :is-open="isModalOpenIn"
+      @close="toggleModalIn"
+      :modal-type="'Clock-In'"
+    >
+      <p>Do you really wish to Clock-In?</p>
+    </BaseModal>
+    <BaseModal
+      :is-open="isModalOpenBreak"
+      @close="toggleModalBreak"
+      :modal-type="'Break'"
+    >
+      <p>Do you really wish to take a Break?</p>
+    </BaseModal>
+    <BaseModal
+      :is-open="isModalOpenOut"
+      @close="toggleModalOut"
+      :modal-type="'Clock-Out'"
+    >
+      <p>Do you really wish to Clock-Out?</p>
+    </BaseModal>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRoute } from "vue-router";
+import BaseModal from "./BaseModal.vue";
 
 const sidebarItems = ref([
-  { id: 1, name: "Reports", notifCount: 5, link: "reports" },
-  { id: 2, name: "Timelines", notifCount: 7, link: "timelines" },
-  { id: 3, name: "Projects", notifCount: 2, link: "projects" },
-  { id: 4, name: "Members", notifCount: 50, link: "members" },
+  { id: 1, name: "Drafts", notifCount: 8, link: "drafts", icon: "draft.svg" },
+  {
+    id: 2,
+    name: "Timestamps",
+    notifCount: 7,
+    link: "timestamps",
+    icon: "clock.svg",
+  },
+  {
+    id: 3,
+    name: "Reports",
+    notifCount: 5,
+    link: "reports",
+    icon: "report.svg",
+  },
+  { id: 4, name: "Tasks", notifCount: 2, link: "tasks", icon: "task.svg" },
+]);
+
+const subMenuItems = ref([
+  {
+    id: 1,
+    name: "Projects",
+    children: [{ name: "Project Nemesis" }, { name: "Umbrella Project" }],
+    isOpen: false,
+  },
+  {
+    id: 2,
+    name: "Members",
+    children: [
+      { name: "Juan Dela One" },
+      { name: "Juan Dela Two" },
+      { name: "Juan Dela Three" },
+      { name: "Juan Dela Four" },
+      { name: "Juan Dela Five" },
+      { name: "Juan Dela One" },
+      { name: "Juan Dela Two" },
+      { name: "Juan Dela Three" },
+      { name: "Juan Dela Four" },
+      { name: "Juan Dela Five" },
+      { name: "Juan Dela One" },
+      { name: "Juan Dela Two" },
+      { name: "Juan Dela Three" },
+      { name: "Juan Dela Four" },
+      { name: "Juan Dela Five" },
+      { name: "Juan Dela One" },
+      { name: "Juan Dela Two" },
+      { name: "Juan Dela Three" },
+      { name: "Juan Dela Four" },
+      { name: "Juan Dela Five" },
+    ],
+    isOpen: false,
+  },
 ]);
 
 const route = useRoute();
+
+const toggle = (id: Number) => {
+  subMenuItems.value.map((item) => {
+    if (item.id === id) {
+      item.isOpen = !item.isOpen;
+    }
+    return item;
+  });
+};
+const isModalOpenIn = ref(false);
+const toggleModalIn = () => (isModalOpenIn.value = !isModalOpenIn.value);
+const isModalOpenBreak = ref(false);
+const toggleModalBreak = () =>
+  (isModalOpenBreak.value = !isModalOpenBreak.value);
+const isModalOpenOut = ref(false);
+const toggleModalOut = () => (isModalOpenOut.value = !isModalOpenOut.value);
 </script>

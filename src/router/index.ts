@@ -1,28 +1,28 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ReportView from "../views/ReportsView.vue";
+import DraftsView from "../views/DraftsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
+      name: "drafts",
+      component: DraftsView,
+    },
+    {
+      path: "/timestamps",
+      name: "timestamps",
+      component: () => import("../views/TimestampsView.vue"),
+    },
+    {
+      path: "/reports",
       name: "reports",
-      component: ReportView,
+      component: () => import("../views/ReportsView.vue"),
     },
     {
-      path: "/timelines",
-      name: "timelines",
-      component: () => import("../views/TimelinesView.vue"),
-    },
-    {
-      path: "/projects",
-      name: "projects",
-      component: () => import("../views/ProjectsView.vue"),
-    },
-    {
-      path: "/members",
-      name: "members",
-      component: () => import("../views/MembersView.vue"),
+      path: "/tasks",
+      name: "tasks",
+      component: () => import("../views/TasksView.vue"),
     },
   ],
 });

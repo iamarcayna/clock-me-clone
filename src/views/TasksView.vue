@@ -1,13 +1,13 @@
 <template>
-  <div class="w-full items-center flex justify-center">
-    <div class="h-44 aspect-square">
+  <div class="w-full h-full items-center flex justify-center">
+    <div class="flex items-center flex-col justify-center gap-10">
       <svg
         viewBox="0 0 64 64"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
         aria-hidden="true"
         role="img"
-        class="iconify iconify--emojione"
+        class="iconify iconify--emojione h-44 aspect-square"
         preserveAspectRatio="xMidYMid meet"
         fill="#000000"
       >
@@ -63,7 +63,7 @@
         </g>
       </svg>
       <p class="text-blue-500 font-semibold text-lg">
-        This page is under construction!
+        Sorry, This page is under construction!
       </p>
     </div>
   </div>
